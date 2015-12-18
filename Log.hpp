@@ -7,20 +7,28 @@
 using std::string;
 using std::map;
 using std::cout;
+using std::cerr;
 using std::endl;
 using std::ofstream;
 
 class Log {
 	public:
 		enum class Target : short {
-			STDOUT = 1,
-			LOG_FILE = 2
+			DISABLED = 1,
+			STDOUT = 2,
+			STDERR = 4,
+			LOG_FILE = 8
 		};
 
 		enum class Level : short {
 			DEBUG = 1,
 			INFO = 2,
-			ERR = 3
+			NOTICE = 3,
+			WARNING = 4,
+			ERR = 5,
+			CRIT = 6,
+			ALERT = 7,
+			EMERG = 8
 		};
 
 		/**
@@ -118,6 +126,11 @@ class Log {
 		map< Level, string > levelMap = {
 			{ Level::DEBUG, "DEBUG" },
 			{ Level::INFO, "INFO" },
-			{ Level::ERR, "ERROR" }
+			{ Level::NOTICE, "NOTICE" },
+			{ Level::WARNING, "WARNING" },
+			{ Level::ERR, "ERROR" },
+			{ Level::CRIT, "CRITICAL" },
+			{ Level::ALERT, "ALERT" },
+			{ Level::EMERG, "EMERGENCY" }
 		};
 };

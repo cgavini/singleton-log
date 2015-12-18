@@ -47,6 +47,11 @@ void Log::write( Log::Level level, string message ) {
 		return;
 	}
 
+	// Log::Target::DISABLED takes precedence over other targets
+	if( ( this->logTarget & Log::Target::DISABLED ) == Log::Target::DISABLED ) {
+		return;
+	}
+
 	// Prepend the log level if enabled
 	if( this->levelEnabled ){
 		message = this->logLevelToString( this->logLevel ) + static_cast<string>( "\t" ) + message;
@@ -60,9 +65,14 @@ void Log::write( Log::Level level, string message ) {
 		message = timeStr.substr( 0, timeStr.length()-1 ) + static_cast<string>( "\t" ) + message;
 	}
 
-	// Log to stdout if it's our target
+	// Log to stdout if it's one of our targets
 	if( ( this->logTarget & Log::Target::STDOUT ) == Log::Target::STDOUT ) {
 		std::cout << message << std::endl;
+	}
+	
+	// Log to stderr if it's one of our targets
+	if( ( this->logTarget & Log::Target::STDERR ) == Log::Target::STDERR ) {
+		std::cerr << message << std::endl;
 	}
 
 	// Log to a file if it's one of our targets and we've set a logFile
