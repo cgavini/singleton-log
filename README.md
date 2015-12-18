@@ -8,7 +8,7 @@
 #### Usage
 Get an instance of the log
 ```CPP
-Log* log = Log::getLog();
+Log* log = Log::getInstance();
 ```
 
 Write to the log
@@ -23,19 +23,27 @@ Set log target (writes to STDOUT by default)
 // Set logger to write to the console
 log->setTarget( Log::Target::STDOUT );
 
+// Set logger to write to standard error
+log->setTarget( Log::Target::STDERR );
+
 // Set logger to write to a file
 log->setTarget( Log::Target::LOG_FILE );
-log->setLogFile( "myLog.log" );
+log->setFile( "myLog.log" );
 
-// Set logger to write to console and a file
+// Set logger to write to the console and a file
 log->setTarget( Log::Target::STDOUT | Log::Target::LOG_FILE );
-log->setLogFile( "myLog.log" );
+log->setFile( "myLog.log" );
 ```
 
-Set log level. Only messages that are equal or more severe will be logged.
+Set log level (Defaults to INFO). Only messages that are equal or more severe will be logged.
 ```CPP
-// There are 3 log levels available currently: DEBUG, INFO, and ERR
-log->setLogLevel( Log::Level::DEBUG );
-log->setLogLevel( Log::Level::INFO );
-log->setLogLevel( Log::Level::ERR );
+// You can use any of the following log levels:
+//	Log::Level::DEBUG,
+//	Log::Level::INFO,
+//	Log::Level::NOTICE,
+//	Log::Level::WARNING,
+//	Log::Level::ERR,
+//	Log::Level::CRIT,
+//	Log::Level::EMERG
+log->setLevel( Log::Level::DEBUG );
 ```

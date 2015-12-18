@@ -11,8 +11,8 @@ inline Log::Target operator|( Log::Target a, Log::Target b ){
 	return static_cast<Log::Target>( static_cast<short>( a ) | static_cast<short>( b ) );
 }
 
-Log* Log::getLog() {
-	if( log == NULL ) {
+Log* Log::getInstance() {
+	if( !log ) {
 		log = new Log();
 	}
 	return log;
@@ -22,9 +22,15 @@ void Log::setTarget( Log::Target target ) {
 	this->logTarget = target;
 }
 
-int Log::setLogFile( string fileName ) {
+void Log::setLevel( Log::Level level ) {
+	this->logLevel = level;
+}
+
+int Log::setFile( string fileName ) {
+	// Make sure we can open the file for writing
 	ofstream logFile( fileName, ofstream::app );
 	if( !logFile.is_open() ){
+		// Log the failure and return an error code
 		this->log->write( Log::Level::ERR, "Failed to open log file '" + this->logFile + "'" );
 		return 1;
 	}
@@ -33,11 +39,11 @@ int Log::setLogFile( string fileName ) {
 	return 0;
 }
 
-Log::Level Log::getLogLevel() {
+Log::Level Log::getLevel() {
 	return this->logLevel;
 }
 
-string Log::logLevelToString( Log::Level level ) {
+string Log::levelToString( Log::Level level ) {
 	return this->levelMap[ level ];
 }
 
@@ -54,7 +60,7 @@ void Log::write( Log::Level level, string message ) {
 
 	// Prepend the log level if enabled
 	if( this->levelEnabled ){
-		message = this->logLevelToString( this->logLevel ) + static_cast<string>( "\t" ) + message;
+		message = this->levelToString( this->logLevel ) + static_cast<string>( "\t" ) + message;
 	}
 
 	// Prepend the current date and time if enabled

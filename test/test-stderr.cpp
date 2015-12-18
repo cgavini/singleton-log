@@ -6,6 +6,7 @@
 int main(){
 	Log* log = Log::getInstance();
 	log->setLevel( Log::Level::DEBUG );
+	log->setTarget( Log::Target::STDERR );
 
 	unsigned int i = 0;
 	string s = "Hello, world";

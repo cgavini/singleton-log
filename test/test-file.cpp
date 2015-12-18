@@ -3,13 +3,14 @@
 #include <iostream>
 
 int main(){
-	Log* log = Log::getLog();
+	Log* log = Log::getInstance();
+	log->setLevel( Log::Level::INFO );
 	log->setTarget( Log::Target::LOG_FILE );
-	log->setLogFile( "test.log" );
+	log->setFile( "test.log" );
 
-	int i = 0;
+	unsigned int i = 0;
 	string s = "Hello, world";
 	while( i < s.length() ) {
-		log->write( Log::Level::DEBUG, "Hello, world" + i++ );
+		log->write( Log::Level::INFO, "Hello, world" + i++ );
 	}
 }

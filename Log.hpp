@@ -36,7 +36,7 @@ class Log {
 		 *
 		 * \return	Log*	Pointer to Log instance
 		 */
-		static Log* getLog();
+		static Log* getInstance();
 
 		/**
 		 * Set the location to log messages.
@@ -46,11 +46,18 @@ class Log {
 		void setTarget( Target target );
 
 		/**
+		 * Set the severity of messages to log.
+		 *
+		 * \param	Level	The log level to set
+		 */
+		void setLevel( Level level );
+
+		/**
 		 * Set a file to log to if the target is LOG_FILE.
 		 *
 		 * \param	string	The file to which we will log
 		 */
-		int setLogFile( string fileName );
+		int setFile( string fileName );
 
 		/**
 		 * Get the current log level. Only messages
@@ -58,7 +65,7 @@ class Log {
 		 *
 		 * \return	Log::Level	The current log level
 		 */
-		Level getLogLevel();
+		Level getLevel();
 
 		/**
 		 * Convert the Log::Level enum to a string.
@@ -66,7 +73,7 @@ class Log {
 		 * \param	Log::Level	The level to convert
 		 * \return	string	The converted level
 		 */
-		string logLevelToString( Level level );
+		string levelToString( Level level );
 
 		/**
 		 * Log a message.
@@ -111,16 +118,14 @@ class Log {
 		// Our single instance of the class
 		static Log* log;
 
-		// Enums that tell write() what and where to log
+		// write() uses these variables to determine which messages should be written where.
+		Level logLevel = Level::INFO;
 		Target logTarget = Target::STDOUT;
-		Level logLevel = Level::DEBUG;
+		string logFile = "";
 
 		// Flags that change log style
 		bool timestampEnabled = true;
 		bool levelEnabled = true;
-
-		// Where to print if using the LOG_FILE target
-		string logFile = "";
 
 		// String representations of log levels
 		map< Level, string > levelMap = {
