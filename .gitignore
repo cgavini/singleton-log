@@ -1,4 +1,3 @@
-*.so
 *.cmake
 CMakeFiles/*
 test/CMakeFiles/*
