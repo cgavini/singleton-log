@@ -3,6 +3,7 @@
 
 #### Installation
 * Install cmake and make
+* Build and install the library
 ```bash
 cd /path/to/repo && cmake . && make install
 ```
