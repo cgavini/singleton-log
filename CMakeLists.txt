@@ -1,13 +1,16 @@
-project( log )
+project( singleton-log )
 
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required( VERSION 2.8 )
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR} )
 
 set( CMAKE_CXX_FLAGS "-std=c++1y -Wall -Wextra -Werror" )
 
-file(GLOB PKG_SOURCE *.cpp)
+file( GLOB PKG_SOURCE *.cpp )
 
-add_library( log SHARED ${PKG_SOURCE} )
+add_library( singleton-log SHARED ${PKG_SOURCE} )
+install( TARGETS singleton-log
+	LIBRARY DESTINATION lib )
 
-add_subdirectory( test )
+# Uncomment to build tests
+# add_subdirectory( test )
