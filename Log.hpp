@@ -3,7 +3,9 @@
 #include <fstream>
 #include <map>
 #include <ctime>
+#include <memory>
 
+using std::shared_ptr;
 using std::string;
 using std::map;
 using std::cout;
@@ -36,7 +38,7 @@ class Log {
 		 *
 		 * \return	Log*	Pointer to Log instance
 		 */
-		static Log* getInstance();
+		static shared_ptr<Log> getInstance();
 
 		/**
 		 * Set the location to log messages.
@@ -116,7 +118,7 @@ class Log {
 
 	private:
 		// Our single instance of the class
-		static Log* log;
+		static shared_ptr<Log> log;
 
 		// write() uses these variables to determine which messages should be written where.
 		Level logLevel = Level::INFO;

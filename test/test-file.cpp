@@ -1,9 +1,9 @@
 #include <string>
-#include "Log.hpp"
+#include "../Log.hpp"
 #include <iostream>
 
 int main(){
-	Log* log = Log::getInstance();
+	shared_ptr<Log> log = Log::getInstance();
 	log->setLevel( Log::Level::INFO );
 	log->setTarget( Log::Target::LOG_FILE );
 	log->setFile( "test.log" );

@@ -1,10 +1,10 @@
 #include <string>
-#include "Log.hpp"
+#include "../Log.hpp"
 #include <iostream>
 
 
 int main(){
-	Log* log = Log::getInstance();
+	shared_ptr<Log> log = Log::getInstance();
 	log->setLevel( Log::Level::DEBUG );
 
 	unsigned int i = 0;
@@ -12,5 +12,4 @@ int main(){
 	while( i < s.length() ) {
 		log->write( Log::Level::DEBUG, "Hello, world" + i++ );
 	}
-	delete log;
 }

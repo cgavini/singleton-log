@@ -1,7 +1,7 @@
 #include "Log.hpp"
 
-// Initialize our instance to NULL, so that we can test if we already have one
-Log* Log::log = NULL;
+// We have to define the static instance here so that member functions can use it.
+shared_ptr<Log> Log::log;
 
 // Allow targets to be combined
 inline Log::Target operator&( Log::Target a, Log::Target b ){
@@ -11,9 +11,9 @@ inline Log::Target operator|( Log::Target a, Log::Target b ){
 	return static_cast<Log::Target>( static_cast<short>( a ) | static_cast<short>( b ) );
 }
 
-Log* Log::getInstance() {
+shared_ptr<Log> Log::getInstance() {
 	if( !log ) {
-		log = new Log();
+		log = shared_ptr<Log>( new Log() );
 	}
 	return log;
 }
@@ -60,7 +60,7 @@ void Log::write( Log::Level level, string message ) {
 
 	// Prepend the log level if enabled
 	if( this->levelEnabled ){
-		message = this->levelToString( this->logLevel ) + static_cast<string>( "\t" ) + message;
+		message = this->levelToString( level ) + static_cast<string>( "\t" ) + message;
 	}
 
 	// Prepend the current date and time if enabled

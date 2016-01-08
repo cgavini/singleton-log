@@ -1,9 +1,9 @@
 #include <string>
-#include "Log.cpp"
+#include "../Log.cpp"
 #include <iostream>
 
 int main(){
-	Log* log = Log::getInstance();
+	std::shared_ptr<Log> log = Log::getInstance();
 	log->setLevel( Log::Level::WARNING );
 	log->setTarget( Log::Target::LOG_FILE | Log::Target::STDOUT );
 	log->setFile( "./logs/test.log" );
