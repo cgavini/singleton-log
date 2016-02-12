@@ -51,3 +51,8 @@ Set log level (Defaults to INFO). Only messages that are equal or more severe wi
 //	Log::Level::EMERG
 log->setLevel( Log::Level::DEBUG );
 ```
+
+#### To-Do
+* Syslog support
+* Real unit tests
+* Add process information to log messages

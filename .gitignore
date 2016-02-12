@@ -1,6 +1,11 @@
+# Build files
 *.cmake
 CMakeFiles/*
 test/CMakeFiles/*
 Makefile
 CMakeCache.txt
 *.swp
+
+# Results of build
+*.so
+*.out

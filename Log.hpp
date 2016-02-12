@@ -141,3 +141,13 @@ class Log {
 			{ Level::EMERG, "EMERGENCY" }
 		};
 };
+
+////////////////////////
+// Bit-wise operators //
+////////////////////////
+inline Log::Target operator&( Log::Target a, Log::Target b ){
+	return static_cast<Log::Target>( static_cast<short>( a ) & static_cast<short>( b ) );
+}
+inline Log::Target operator|( Log::Target a, Log::Target b ){
+	return static_cast<Log::Target>( static_cast<short>( a ) | static_cast<short>( b ) );
+}

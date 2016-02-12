@@ -3,14 +3,6 @@
 // We have to define the static instance here so that member functions can use it.
 shared_ptr<Log> Log::log;
 
-// Allow targets to be combined
-inline Log::Target operator&( Log::Target a, Log::Target b ){
-	return static_cast<Log::Target>( static_cast<short>( a ) & static_cast<short>( b ) );
-}
-inline Log::Target operator|( Log::Target a, Log::Target b ){
-	return static_cast<Log::Target>( static_cast<short>( a ) | static_cast<short>( b ) );
-}
-
 shared_ptr<Log> Log::getInstance() {
 	if( !log ) {
 		log = shared_ptr<Log>( new Log() );

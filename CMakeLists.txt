@@ -13,4 +13,4 @@ install( TARGETS singleton-log
 	LIBRARY DESTINATION lib )
 
 # Uncomment to build tests
-# add_subdirectory( test )
+add_subdirectory( test )
