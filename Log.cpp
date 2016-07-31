@@ -1,29 +1,29 @@
 #include "Log.hpp"
 
 // We have to define the static instance here so that member functions can use it.
-shared_ptr<Log> Log::log;
+shared_ptr<bf::Log> bf::Log::log;
 
-shared_ptr<Log> Log::getInstance() {
+shared_ptr<bf::Log> bf::Log::getInstance() {
 	if( !log ) {
-		log = shared_ptr<Log>( new Log() );
+		log = shared_ptr<bf::Log>( new bf::Log() );
 	}
 	return log;
 }
 
-void Log::setTarget( Log::Target target ) {
+void bf::Log::setTarget( bf::Log::Target target ) {
 	this->logTarget = target;
 }
 
-void Log::setLevel( Log::Level level ) {
+void bf::Log::setLevel( bf::Log::Level level ) {
 	this->logLevel = level;
 }
 
-int Log::setFile( string fileName ) {
+int bf::Log::setFile( string fileName ) {
 	// Make sure we can open the file for writing
 	ofstream logFile( fileName, ofstream::app );
 	if( !logFile.is_open() ){
-		// Log the failure and return an error code
-		this->log->write( Log::Level::ERR, "Failed to open log file '" + this->logFile + "'" );
+		// bf::Log the failure and return an error code
+		this->log->write( bf::Log::Level::ERR, "Failed to open log file '" + this->logFile + "'" );
 		return 1;
 	}
 
@@ -31,52 +31,59 @@ int Log::setFile( string fileName ) {
 	return 0;
 }
 
-Log::Level Log::getLevel() {
+bf::Log::Level bf::Log::getLevel() {
 	return this->logLevel;
 }
 
-string Log::levelToString( Log::Level level ) {
+string bf::Log::levelToString( bf::Log::Level level ) {
 	return this->levelMap[ level ];
 }
 
-void Log::write( Log::Level level, string message ) {
+void bf::Log::write( bf::Log::Level level, string message ) {
+	string toLog;
+
 	// Only log if we're at or above the pre-defined severity
 	if( level < this->logLevel ) {
 		return;
 	}
 
-	// Log::Target::DISABLED takes precedence over other targets
-	if( ( this->logTarget & Log::Target::DISABLED ) == Log::Target::DISABLED ) {
+	// bf::Log::Target::DISABLED takes precedence over other targets
+	if( ( this->logTarget & bf::Log::Target::DISABLED ) == bf::Log::Target::DISABLED ) {
 		return;
 	}
 
-	// Prepend the log level if enabled
+	// Append the log level if enabled
 	if( this->levelEnabled ){
-		message = this->levelToString( level ) + static_cast<string>( "\t" ) + message;
+		toLog += this->levelToString( level );
 	}
 
-	// Prepend the current date and time if enabled
+	// Append the current date and time if enabled
 	if( this->timestampEnabled ){
-		time_t rawtime;
-		time( &rawtime );
-		string timeStr( ctime( &rawtime ) );
-		message = timeStr.substr( 0, timeStr.length()-1 ) + static_cast<string>( "\t" ) + message;
+		std::time_t time = system_clock::to_time_t( system_clock::now() );
+		struct tm * timeStruct = std::localtime( &time );
+
+		char timeStr[ 80 ];
+		strftime( timeStr, 80, "%d/%b/%Y:%H:%M:%S %z", timeStruct );
+		toLog += " [" + string( timeStr ) + "]";
 	}
 
-	// Log to stdout if it's one of our targets
-	if( ( this->logTarget & Log::Target::STDOUT ) == Log::Target::STDOUT ) {
-		std::cout << message << std::endl;
+	// Append the message to our log statement
+	toLog += " " + message;
+
+	// bf::Log to stdout if it's one of our targets
+	if( ( this->logTarget & bf::Log::Target::STDOUT ) == bf::Log::Target::STDOUT ) {
+		std::cout << toLog << std::endl;
 	}
 	
-	// Log to stderr if it's one of our targets
-	if( ( this->logTarget & Log::Target::STDERR ) == Log::Target::STDERR ) {
-		std::cerr << message << std::endl;
+	// bf::Log to stderr if it's one of our targets
+	if( ( this->logTarget & bf::Log::Target::STDERR ) == bf::Log::Target::STDERR ) {
+		std::cerr << toLog << std::endl;
 	}
 
-	// Log to a file if it's one of our targets and we've set a logFile
-	if( ( this->logTarget & Log::Target::LOG_FILE ) == Log::Target::LOG_FILE && this->logFile != "" ) {
+	// bf::Log to a file if it's one of our targets and we've set a logFile
+	if( ( this->logTarget & bf::Log::Target::LOG_FILE ) == bf::Log::Target::LOG_FILE && this->logFile != "" ) {
 		ofstream logFile( this->logFile, ofstream::app );
-		logFile << message << "\n";
+		logFile << toLog << "\n";
 		logFile.close();
 	}
 }

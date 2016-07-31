@@ -3,14 +3,14 @@
 #include <iostream>
 
 int main(){
-	std::shared_ptr<Log> log = Log::getInstance();
-	log->setLevel( Log::Level::WARNING );
-	log->setTarget( Log::Target::LOG_FILE | Log::Target::STDOUT );
+	std::shared_ptr<bf::Log> log = bf::Log::getInstance();
+	log->setLevel( bf::Log::Level::WARNING );
+	log->setTarget( bf::Log::Target::LOG_FILE | bf::Log::Target::STDOUT );
 	log->setFile( "./logs/test.log" );
 
 	unsigned int i = 0;
 	string s = "Hello, world";
 	while( i < s.length() ) {
-		log->write( Log::Level::WARNING, "Hello, world" + i++ );
+		log->write( bf::Log::Level::WARNING, "Hello, world" + i++ );
 	}
 }

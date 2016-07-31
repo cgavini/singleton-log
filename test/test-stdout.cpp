@@ -1,15 +1,23 @@
 #include <string>
 #include "../Log.hpp"
 #include <iostream>
+#include <thread>
+#include <chrono>
 
+void sleep( int seconds ) {
+	std::this_thread::sleep_for( std::chrono::seconds( seconds ) );
+}
 
 int main(){
-	shared_ptr<Log> log = Log::getInstance();
-	log->setLevel( Log::Level::DEBUG );
+	shared_ptr<bf::Log> log = bf::Log::getInstance();
+	log->setLevel( bf::Log::Level::DEBUG );
 
-	unsigned int i = 0;
-	string s = "Hello, world";
-	while( i < s.length() ) {
-		log->write( Log::Level::DEBUG, "Hello, world" + i++ );
-	}
+	log->write( bf::Log::Level::DEBUG, "x = 10" );
+	sleep( 2 );
+	log->write( bf::Log::Level::ERR, "Oh no! We've encountered an error!");
+	sleep( 2 );
+	log->write( bf::Log::Level::WARNING, "Just so you know, you're using this wrong" );
+	sleep( 2 );
+	log->write( bf::Log::Level::DEBUG, "x is now 15" );
+
 }
