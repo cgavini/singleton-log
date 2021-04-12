@@ -1,6 +1,11 @@
 ## singleton-log
 ### A simple C++ logger that makes use of a singleton pattern
 
+
+#### Updates:
+* 4/12/21: Added multithreading support using `std::mutex`
+* 4/12/21: Added sample Visual Studio solution
+
 #### Installation
 * Install cmake and make
 * Build and install the library

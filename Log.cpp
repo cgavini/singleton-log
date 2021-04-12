@@ -1,7 +1,9 @@
+#include <mutex>
 #include "Log.hpp"
 
 // We have to define the static instance here so that member functions can use it.
 shared_ptr<bf::Log> bf::Log::log;
+std::mutex mtx;
 
 shared_ptr<bf::Log> bf::Log::getInstance() {
 	if( !log ) {
@@ -60,7 +62,9 @@ void bf::Log::write( bf::Log::Level level, string message ) {
 	// Append the current date and time if enabled
 	if( this->timestampEnabled ){
 		std::time_t time = system_clock::to_time_t( system_clock::now() );
-		struct tm * timeStruct = std::localtime( &time );
+		struct tm timeinfo;
+		localtime_s(&timeinfo, &time );
+		struct tm* timeStruct = &timeinfo;
 
 		char timeStr[ 80 ];
 		strftime( timeStr, 80, "%d/%b/%Y:%H:%M:%S %z", timeStruct );
@@ -72,18 +76,24 @@ void bf::Log::write( bf::Log::Level level, string message ) {
 
 	// bf::Log to stdout if it's one of our targets
 	if( ( this->logTarget & bf::Log::Target::STDOUT ) == bf::Log::Target::STDOUT ) {
+		mtx.lock();
 		std::cout << toLog << std::endl;
+		mtx.unlock();
 	}
 	
 	// bf::Log to stderr if it's one of our targets
 	if( ( this->logTarget & bf::Log::Target::STDERR ) == bf::Log::Target::STDERR ) {
+		mtx.lock();
 		std::cerr << toLog << std::endl;
+		mtx.unlock();
 	}
 
 	// bf::Log to a file if it's one of our targets and we've set a logFile
 	if( ( this->logTarget & bf::Log::Target::LOG_FILE ) == bf::Log::Target::LOG_FILE && this->logFile != "" ) {
+		mtx.lock();
 		ofstream logFile( this->logFile, ofstream::app );
 		logFile << toLog << "\n";
 		logFile.close();
+		mtx.unlock();
 	}
 }
