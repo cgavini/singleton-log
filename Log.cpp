@@ -76,24 +76,21 @@ void bf::Log::write( bf::Log::Level level, string message ) {
 
 	// bf::Log to stdout if it's one of our targets
 	if( ( this->logTarget & bf::Log::Target::STDOUT ) == bf::Log::Target::STDOUT ) {
-		mtx.lock();
-		std::cout << toLog << std::endl;
-		mtx.unlock();
+			std::lock_guard<std::mutex> lock(mtx);
+			std::cout << toLog << std::endl;
 	}
 	
 	// bf::Log to stderr if it's one of our targets
 	if( ( this->logTarget & bf::Log::Target::STDERR ) == bf::Log::Target::STDERR ) {
-		mtx.lock();
-		std::cerr << toLog << std::endl;
-		mtx.unlock();
+			std::lock_guard<std::mutex> lock(mtx);
+			std::cerr << toLog << std::endl;
 	}
 
 	// bf::Log to a file if it's one of our targets and we've set a logFile
-	if( ( this->logTarget & bf::Log::Target::LOG_FILE ) == bf::Log::Target::LOG_FILE && this->logFile != "" ) {
-		mtx.lock();
-		ofstream logFile( this->logFile, ofstream::app );
-		logFile << toLog << "\n";
-		logFile.close();
-		mtx.unlock();
+	if ((this->logTarget & bf::Log::Target::LOG_FILE) == bf::Log::Target::LOG_FILE && this->logFile != "") {
+			std::lock_guard<std::mutex> lock(mtx);
+			ofstream logFile(this->logFile, ofstream::app);
+			logFile << toLog << "\n";
+			logFile.close(); 
 	}
 }
