@@ -12,7 +12,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: cgavini/checkout@v3
     - name: test
       run: echo "Hello World"
 
