@@ -10,7 +10,8 @@ jobs:
   build:
 
     runs-on: windows-latest
-
+    env:
+      GH_CHECKOUT_WORKSPACE: "D:\a\singleton-log\mytest"
     steps:
     - uses: cgavini/checkout@v3
     - name: test
